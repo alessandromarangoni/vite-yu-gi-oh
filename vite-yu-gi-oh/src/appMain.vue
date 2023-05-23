@@ -4,7 +4,11 @@ import axios from 'axios';
 
 export default {
     name: 'appMain',
-    store: store,
+    data() {
+        return {
+            store,
+        }
+    },
     methods: {
         getCardImageUrl() {
             axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
@@ -24,11 +28,12 @@ export default {
 
 <template>
     <div class="container">
-        <div class="cards">
-            <div>
-                <img src="" alt="">
-                <span>{{}}</span>
-                <span>{{ }}</span>
+        <div class="cards_container">
+            <div class="" v-for="(carta, i) in store.carte[0]">
+                <img :src="carta.card_images[0].image_url" alt="">
+                <h4>{{ carta.name }}</h4>
+                <p>{{ carta.archetype }}</p>
+                <span></span>
             </div>
         </div>
     </div>
@@ -36,15 +41,36 @@ export default {
 
 <style scoped lang="scss">
 .container {
-    width: 100%;
+    background-color: rgba(255, 255, 255, 0.505);
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 3rem;
+    border-radius: 30px;
+}
+
+.cards_container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-}
+    text-align: center;
 
-.cards {
-    height: 100px;
-    width: 100px;
-    background-color: aqua;
+    div {
+        width: calc(100% / 5);
+
+        h4 {
+            color: white;
+            padding: 1rem;
+        }
+
+        p {
+            color: rgb(0, 0, 0);
+        }
+    }
+
+    img {
+        padding-top: 1rem;
+        width: 150px;
+    }
 }
 </style>
