@@ -8,7 +8,8 @@ export default {
     data() {
         return {
             store,
-            tipoScelto: ''
+            tipoScelto: null,
+            tutti: null
         }
     },
     methods: {
@@ -22,9 +23,13 @@ export default {
         },
         getCardImageArchetipo() {
             for (let i = 0; i < store.carte[0].length; i++) {
-                const archetipo = store.carte[0][i].archetype;
+                let archetipo = store.carte[0][i].archetype;
                 if (archetipo !== undefined && (!store.archetipi.includes(archetipo))) {
                     this.store.archetipi.push(archetipo)
+                }
+                else if (archetipo == undefined) {
+                    archetipo = "nessuno"
+                    if ((!store.archetipi.includes(archetipo))) { this.store.archetipi.push(archetipo) }
                 }
             }
             console.log(store.archetipi)
@@ -32,6 +37,7 @@ export default {
         changeSelect(valore) {
             this.tipoScelto = valore
             console.log(this.tipoScelto)
+            this.tipoScelto = null
         }
     },
     mounted() {
@@ -44,7 +50,8 @@ export default {
     <div class="container">
         <div>
             <select name="archetype" v-model="this.tipoScelto" id="">
-                <option v-for="archetipo in store.archetipi" @change="changeSelect(archetipo)" :value="archetipo" selected>
+                <option :value="null">visualizza tutti</option>
+                <option v-for="archetipo in store.archetipi" @change="changeSelect(archetipo)" :value="archetipo">
                     {{ archetipo }}
                 </option>
             </select>
@@ -53,6 +60,7 @@ export default {
             <div class="" v-for="(carta, i) in store.carte[0]" v-show="carta.archetype == this.tipoScelto">
                 <img :src="carta.card_images[0].image_url" alt="">
                 <h4>{{ carta.name }}</h4>
+                <p v-if="carta.archetype ? undefined : carta.archetype = 'nessuno'">{{ carta.archetype }}</p>
                 <p>{{ carta.archetype }}</p>
                 <span></span>
             </div>
